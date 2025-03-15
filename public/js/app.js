@@ -190,8 +190,11 @@ function initializeJitsiMeet() {
         }
     };
     
-    // Initialiser l'API Jitsi Meet
-    jitsiApi = new JitsiMeetExternalAPI('meet.jit.si', options);
+    // Utiliser une instance Jitsi Meet alternative qui n'impose pas de restrictions "membres seulement"
+    const jitsiDomain = 'jitsi.belnet.be';
+    
+    // Initialiser l'API Jitsi Meet avec l'instance alternative
+    jitsiApi = new JitsiMeetExternalAPI(jitsiDomain, options);
     
     // Écouteurs d'événements Jitsi Meet
     jitsiApi.addEventListeners({
@@ -209,15 +212,6 @@ function handleError(error) {
     
     // Traiter les erreurs spécifiques
     if (error && error.error) {
-        // Erreur de type "membres seulement"
-        if (error.error.name === "conference.connectionError.membersOnly") {
-            console.log("Tentative de contournement de la restriction 'membres seulement'...");
-            // Réinitialiser la connexion avec un identifiant de salle légèrement modifié
-            roomId = roomId + "-direct";
-            initializeJitsiMeet();
-            return;
-        }
-        
         // Erreur de connexion perdue
         if (error.error.type === 'connection.droppedError') {
             alert('La connexion à la visioconférence a été perdue. Veuillez rafraîchir la page et réessayer.');
