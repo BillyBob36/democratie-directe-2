@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démocratie Directe 2</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src='https://meet.jit.si/external_api.js'></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Ajout de méta-tags pour éviter le chargement de contenu tiers -->
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://meet.jit.si wss: ws: 'unsafe-inline'; script-src 'self' https://meet.jit.si 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://meet.jit.si wss: ws:;">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Démocratie Directe 2</h1>
+            <p>Visioconférence avec système de vote intégré - Sans connexion requise</p>
+        </header>
+
+        <main>
+            <div class="room-controls" id="room-controls">
+                <h2>Créer ou rejoindre une salle</h2>
+                <div class="form-group">
+                    <input type="text" id="room-name" placeholder="Nom de la salle">
+                    <input type="text" id="user-name" placeholder="Votre nom">
+                    <button id="create-room-btn">Créer une salle</button>
+                    <button id="join-room-btn">Rejoindre la salle</button>
+                </div>
+                <div class="privacy-note">
+                    <p><strong>Note de confidentialité :</strong> Cette application n'utilise pas de connexion Google ou GitHub. Aucune extension n'est requise. Vos données restent privées et ne sont pas partagées avec des tiers.</p>
+                </div>
+            </div>
+
+            <div class="meeting-container" id="meeting-container" style="display: none;">
+                <div class="meeting-layout">
+                    <div id="jitsi-container"></div>
+                    <div class="voting-panel">
+                        <h2>Système de vote</h2>
+                        <div id="create-vote-panel">
+                            <h3>Créer un nouveau vote</h3>
+                            <div class="form-group">
+                                <input type="text" id="vote-question" placeholder="Question du vote">
+                                <div id="vote-options">
+                                    <input type="text" class="vote-option" placeholder="Option 1">
+                                    <input type="text" class="vote-option" placeholder="Option 2">
+                                </div>
+                                <button id="add-option-btn">+ Ajouter une option</button>
+                                <button id="create-vote-btn">Créer le vote</button>
+                            </div>
+                        </div>
+                        <div id="active-votes">
+                            <h3>Votes en cours</h3>
+                            <div id="votes-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Démocratie Directe 2 - Aucune connexion requise</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
