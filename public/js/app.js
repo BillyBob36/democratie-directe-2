@@ -130,7 +130,31 @@ function initializeJitsiMeet() {
             microsoftApiApplicationClientID: '',
             // Désactiver les extensions
             disableThirdPartyRequests: true,
-            disablePlugins: true
+            disablePlugins: true,
+            // Résoudre les problèmes d'iframe
+            iframeAllowOverlayScrollbar: true,
+            enableIframeAPI: true,
+            // Résoudre les problèmes de sécurité
+            e2eping: {
+                enabled: false
+            },
+            p2p: {
+                enabled: true,
+                preferH264: true,
+                disableH264: false,
+                useStunTurn: true
+            },
+            // Optimisations supplémentaires
+            resolution: 720,
+            constraints: {
+                video: {
+                    height: {
+                        ideal: 720,
+                        max: 720,
+                        min: 240
+                    }
+                }
+            }
         },
         interfaceConfigOverwrite: {
             TOOLBAR_BUTTONS: [
@@ -151,7 +175,10 @@ function initializeJitsiMeet() {
             DISABLE_FOCUS_INDICATOR: true,
             DISABLE_VIDEO_BACKGROUND: true,
             DISABLE_DOMINANT_SPEAKER_INDICATOR: false,
-            DISABLE_TRANSCRIPTION_SUBTITLES: false
+            DISABLE_TRANSCRIPTION_SUBTITLES: false,
+            // Résoudre les problèmes d'interface
+            DISABLE_IFRAME_API: false,
+            ALLOW_IFRAME_FULLSCREEN: true
         }
     };
     
@@ -162,8 +189,19 @@ function initializeJitsiMeet() {
     jitsiApi.addEventListeners({
         videoConferenceJoined: handleVideoConferenceJoined,
         participantJoined: handleParticipantJoined,
-        participantLeft: handleParticipantLeft
+        participantLeft: handleParticipantLeft,
+        // Ajouter des gestionnaires d'erreurs
+        errorOccurred: handleError
     });
+}
+
+// Gérer les erreurs de Jitsi Meet
+function handleError(error) {
+    console.error('Erreur Jitsi Meet:', error);
+    // Afficher un message d'erreur à l'utilisateur si nécessaire
+    if (error && error.type === 'connection.droppedError') {
+        alert('La connexion à la visioconférence a été perdue. Veuillez rafraîchir la page et réessayer.');
+    }
 }
 
 // Rejoindre la salle Socket.IO
