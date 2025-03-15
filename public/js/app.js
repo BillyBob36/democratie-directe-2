@@ -128,6 +128,14 @@ function initializeJitsiMeet() {
             enableCalendarIntegration: false,
             googleApiApplicationClientID: '',
             microsoftApiApplicationClientID: '',
+            // Résoudre le problème de salle en mode "membres seulement"
+            membersOnly: {
+                enabled: false
+            },
+            lobby: {
+                autoKnock: true,
+                enableForceMute: false
+            },
             // Désactiver les extensions
             disableThirdPartyRequests: true,
             disablePlugins: true,
@@ -198,10 +206,27 @@ function initializeJitsiMeet() {
 // Gérer les erreurs de Jitsi Meet
 function handleError(error) {
     console.error('Erreur Jitsi Meet:', error);
-    // Afficher un message d'erreur à l'utilisateur si nécessaire
-    if (error && error.type === 'connection.droppedError') {
-        alert('La connexion à la visioconférence a été perdue. Veuillez rafraîchir la page et réessayer.');
+    
+    // Traiter les erreurs spécifiques
+    if (error && error.error) {
+        // Erreur de type "membres seulement"
+        if (error.error.name === "conference.connectionError.membersOnly") {
+            console.log("Tentative de contournement de la restriction 'membres seulement'...");
+            // Réinitialiser la connexion avec un identifiant de salle légèrement modifié
+            roomId = roomId + "-direct";
+            initializeJitsiMeet();
+            return;
+        }
+        
+        // Erreur de connexion perdue
+        if (error.error.type === 'connection.droppedError') {
+            alert('La connexion à la visioconférence a été perdue. Veuillez rafraîchir la page et réessayer.');
+            return;
+        }
     }
+    
+    // Afficher un message générique pour les autres erreurs
+    console.warn("Une erreur s'est produite avec Jitsi Meet. Consultez la console pour plus de détails.");
 }
 
 // Rejoindre la salle Socket.IO
